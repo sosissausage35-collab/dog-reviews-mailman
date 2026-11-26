@@ -11,20 +11,21 @@ export const LINE =
 // --- validation gate ---
 const MAX_CHARS = 200;
 
-if (!LINE || LINE.trim().length === 0) {
-  console.error("ERROR: LINE must not be empty.");
-  process.exit(1);
+function validateLine(line: string): void {
+  if (!line || line.trim().length === 0) {
+    throw new Error("LINE must not be empty.");
+  }
+  if (line.includes("\n") || line.includes("\r")) {
+    throw new Error("LINE must be a single line.");
+  }
+  if (line.length > MAX_CHARS) {
+    throw new Error(
+      `LINE is ${line.length} characters, over the ${MAX_CHARS}-character limit.`,
+    );
+  }
 }
-if (LINE.includes("\n") || LINE.includes("\r")) {
-  console.error("ERROR: LINE must be a single line.");
-  process.exit(1);
-}
-if (LINE.length > MAX_CHARS) {
-  console.error(
-    `ERROR: LINE is ${LINE.length} characters, over the ${MAX_CHARS}-character limit.`,
-  );
-  process.exit(1);
-}
+
+validateLine(LINE);
 
 console.log(LINE);
 console.log(`Characters: ${LINE.length} / ${MAX_CHARS}`);
